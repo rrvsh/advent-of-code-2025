@@ -1,10 +1,10 @@
 [package]
-name = "aoc2025-rs"
+name = "aoc-rs"
 version = "0.1.0-alpha"
-description = "Solutions to Advent of Code 2025 in Rust"
+description = "Solutions to Advent of Code in Rust"
 edition = "2024"
 readme = "docs/README.md"
-repository = "https://github.com/rrvsh/advent-of-code-2025"
+repository = "https://github.com/rrvsh/adventofcode"
 license = "MIT"
 keywords = ["cli"]
 categories = ["command-line-utilities"]

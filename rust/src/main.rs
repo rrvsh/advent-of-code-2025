@@ -38,7 +38,6 @@ fn day1part2() -> io::Result<()> {
         let line = line?;
         let clicks = line[1..].parse::<i32>().expect("Parse integer error")
             * if &line[..1] == "L" { -1 } else { 1 };
-        println!("dial: {dial}, clicks: {clicks}");
         dial += clicks;
         match dial.cmp(&0) {
             Ordering::Less => {
@@ -66,7 +65,6 @@ fn day1part2() -> io::Result<()> {
                 }
             }
         }
-        println!("password: {password}");
     }
     println!("Solution for Day 1 Part 2: {password}");
     Ok(())
