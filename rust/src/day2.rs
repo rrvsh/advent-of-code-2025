@@ -1,6 +1,13 @@
 pub fn part1(input: &str) -> i64 {
     parse_input(input)
         .into_iter()
+        .filter(|x| has_one_repeat(*x))
+        .sum::<i64>()
+}
+
+pub fn part2(input: &str) -> i64 {
+    parse_input(input)
+        .into_iter()
         .filter(|x| has_repeat(*x))
         .sum::<i64>()
 }
@@ -19,10 +26,43 @@ fn parse_input(input: &str) -> Vec<i64> {
     acc
 }
 
-fn has_repeat(input: i64) -> bool {
+fn has_one_repeat(input: i64) -> bool {
     let input = input.to_string();
     let len = input.len();
     len.is_multiple_of(2) && input[..(len / 2)] == input[(len / 2)..]
+}
+
+fn split_by_sublength(input: &str, sub_len: usize) -> Vec<&str> {
+    if input.len() == sub_len {
+        vec![input]
+    } else {
+        let mut acc = vec![];
+        let (good_chunk, bad_chunk) = input.split_at(sub_len);
+        acc.push(good_chunk);
+        acc.append(&mut split_by_sublength(bad_chunk, sub_len));
+        acc
+    }
+}
+
+fn has_repeat(input: i64) -> bool {
+    if has_one_repeat(input) {
+        return true;
+    }
+    let input = input.to_string();
+    let len = input.len();
+    for sub_len in 1..len {
+        if len.is_multiple_of(sub_len) {
+            let chunks: Vec<i64> = split_by_sublength(&input, sub_len)
+                .into_iter()
+                .map(|x| x.parse::<i64>().expect("parse int error"))
+                .collect();
+            let first = chunks[0];
+            if chunks.into_iter().all(|x| x == first) {
+                return true;
+            }
+        }
+    }
+    false
 }
 
 #[cfg(test)]
@@ -30,16 +70,16 @@ mod tests {
     use super::*;
 
     #[test]
-    fn has_repeat_success() {
+    fn has_one_repeat_success() {
         let input = 11;
-        let actual = has_repeat(input);
+        let actual = has_one_repeat(input);
         assert!(actual);
     }
 
     #[test]
-    fn has_repeat_failure() {
+    fn has_one_repeat_failure() {
         let input = 123;
-        let actual = has_repeat(input);
+        let actual = has_one_repeat(input);
         assert!(!actual);
     }
 
